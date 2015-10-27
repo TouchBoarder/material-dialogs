@@ -25,8 +25,6 @@ class DefaultAdapter extends BaseAdapter {
     private final int layout;
 
     private final GravityEnum itemGravity;
-    public RadioButton mRadioButton;
-    public boolean mInitRadio;
 
     public DefaultAdapter(MaterialDialog dialog, @LayoutRes int layout) {
         this.dialog = dialog;
@@ -68,8 +66,6 @@ class DefaultAdapter extends BaseAdapter {
                 boolean selected = dialog.mBuilder.selectedIndex == index;
                 MDTintHelper.setTint(radio, dialog.mBuilder.widgetColor);
                 radio.setChecked(selected);
-                if (selected && mInitRadio)
-                    mRadioButton = radio;
                 break;
             }
             case MULTI: {
@@ -87,6 +83,12 @@ class DefaultAdapter extends BaseAdapter {
 
         view.setTag(index + ":" + dialog.mBuilder.items[index]);
         setupGravity((ViewGroup) view);
+
+        if (dialog.mBuilder.itemIds != null) {
+            if (index < dialog.mBuilder.itemIds.length)
+                view.setId(dialog.mBuilder.itemIds[index]);
+            else view.setId(-1);
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ViewGroup group = (ViewGroup) view;

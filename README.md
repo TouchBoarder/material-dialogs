@@ -1,8 +1,8 @@
 # Material Dialogs
 
-![Screenshots](https://raw.githubusercontent.com/afollestad/material-dialogs/master/art/mdshowcase.png)
+![Screenshots](https://raw.githubusercontent.com/afollestad/material-dialogs/master/art/mddemoshowcase.png)
 
-# Table of Contents
+# Table of Contents (Core)
 
 1. [Sample Project](https://github.com/afollestad/material-dialogs#sample-project)
 2. [Gradle Dependency](https://github.com/afollestad/material-dialogs#gradle-dependency)
@@ -11,6 +11,7 @@
     3. [Commons](https://github.com/afollestad/material-dialogs#commons)
 3. [What's New](https://github.com/afollestad/material-dialogs#whats-new)
 4. [Basic Dialog](https://github.com/afollestad/material-dialogs#basic-dialog)
+5. [Dismissing Dialogs](https://github.com/afollestad/material-dialogs#dismissing-dialogs)
 5. [Migration from AlertDialogs](https://github.com/afollestad/material-dialogs#migration-from-alertdialogs)
 6. [Displaying an Icon](https://github.com/afollestad/material-dialogs#displaying-an-icon)
 7. [Stacked Action Buttons](https://github.com/afollestad/material-dialogs#stacked-action-buttons)
@@ -21,6 +22,7 @@
     1. [Coloring Radio Buttons](https://github.com/afollestad/material-dialogs#coloring-radio-buttons)
 12. [Multi Choice List Dialogs](https://github.com/afollestad/material-dialogs#multi-choice-list-dialogs)
     1. [Coloring Check Boxes](https://github.com/afollestad/material-dialogs#coloring-check-boxes)
+13. [Assigning IDs to List Item Views](https://github.com/afollestad/material-dialogs#assigning-ids-to-list-item-views)
 13. [Custom List Dialogs](https://github.com/afollestad/material-dialogs#custom-list-dialogs)
 14. [Custom Views](https://github.com/afollestad/material-dialogs#custom-views)
     1. [Later Access](https://github.com/afollestad/material-dialogs#later-access)
@@ -39,15 +41,23 @@
     2. [Limiting Input Length](https://github.com/afollestad/material-dialogs#limiting-input-length)
     3. [Custom Invalidation](https://github.com/afollestad/material-dialogs#custom-invalidation)
 21. [Progress Dialogs](https://github.com/afollestad/material-dialogs#progress-dialogs)
-    1. [Indeterminate Progress Dialogs](https://github.com/afollestad/material-dialogs#indeterminate-progress-dialogs)
-    2. [Determinate (Seek Bar) Progress Dialogs](https://github.com/afollestad/material-dialogs#determinate-seek-bar-progress-dialogs)
-    3. [Make an Indeterminate Dialog Horizontal](https://github.com/afollestad/material-dialogs#make-an-indeterminate-dialog-horizontal)
-    4. [Coloring the Progress Bar](https://github.com/afollestad/material-dialogs#coloring-the-progress-bar)
-    5. [Custom Number and Progress Formats](https://github.com/afollestad/material-dialogs#custom-number-and-progress-formats)
-22. [Color Chooser Dialog](https://github.com/afollestad/material-dialogs#color-chooser-dialog)
-23. [Preference Dialogs](https://github.com/afollestad/material-dialogs#preference-dialogs)
-24. [Tint Helper](https://github.com/afollestad/material-dialogs#tint-helper)
-25. [Misc](https://github.com/afollestad/material-dialogs#misc)
+    1. [Proguard](https://github.com/afollestad/material-dialogs#proguard)
+    2. [Indeterminate Progress Dialogs](https://github.com/afollestad/material-dialogs#indeterminate-progress-dialogs)
+    3. [Determinate (Seek Bar) Progress Dialogs](https://github.com/afollestad/material-dialogs#determinate-seek-bar-progress-dialogs)
+    4. [Make an Indeterminate Dialog Horizontal](https://github.com/afollestad/material-dialogs#make-an-indeterminate-dialog-horizontal)
+    5. [Coloring the Progress Bar](https://github.com/afollestad/material-dialogs#coloring-the-progress-bar)
+    6. [Custom Number and Progress Formats](https://github.com/afollestad/material-dialogs#custom-number-and-progress-formats)
+22. [Tint Helper](https://github.com/afollestad/material-dialogs#tint-helper)
+23. [Misc](https://github.com/afollestad/material-dialogs#misc)
+
+# Table of Contents (Commons)
+
+1. [Color Chooser Dialogs](https://github.com/afollestad/material-dialogs#color-chooser-dialogs)
+    1. [Finding Visible Dialogs](https://github.com/afollestad/material-dialogs#finding-visible-dialogs)
+    2. [User Color Input](https://github.com/afollestad/material-dialogs#user-color-input)
+2. [Folder Selector Dialogs](https://github.com/afollestad/material-dialogs#folder-selector-dialogs)
+3. [Preference Dialogs](https://github.com/afollestad/material-dialogs#preference-dialogs)
+4. [Simple List Dialogs](https://github.com/afollestad/material-dialogs#simple-list-dialogs) 
 
 ------
 
@@ -88,18 +98,28 @@ You can create basic, list, single/multi choice, progress, input, etc. dialogs w
 
 ```gradle
 dependencies {
-    compile 'com.afollestad.material-dialogs:core:0.8.0.1@aar'
+
+    // ... other dependencies here
+    
+    compile('com.afollestad.material-dialogs:core:0.8.4.2@aar') {
+        transitive = true
+    }
 }
 ```
 
 ### Commons
 
 The *commons* module contains extensions to the library that not everyone may need. This includes the
-`ColorChooserDialog`, the Material `Preference` classes, and `MaterialSimpleListAdapter`/`MaterialSimpleListItem`.
+`ColorChooserDialog`, `FolderChooserDialog`, the Material `Preference` classes, and `MaterialSimpleListAdapter`/`MaterialSimpleListItem`.
 
 ```gradle
 dependencies {
-    compile 'com.afollestad.material-dialogs:commons:0.8.0.1@aar'
+
+    // ... other dependencies here
+    
+    compile('com.afollestad.material-dialogs:commons:0.8.4.2@aar') {
+        transitive = true
+    }
 }
 ```
 
@@ -141,6 +161,49 @@ On Lollipop (API 21+) or if you use AppCompat, the Material dialog will automati
 (which is used on the positive action button) to the `colorAccent` attribute of your styles.xml theme.
 
 If the content is long enough, it will become scrollable and a divider will be displayed above the action buttons.
+
+---
+
+# Dismissing Dialogs
+
+I've had lots of issues asking how you dismiss a dialog. It works the same way that `AlertDialog` does, as
+both `AlertDialog` and `MaterialDialog` are an instance of `android.app.Dialog` (which is where `dismiss()`
+and `show()` come from). You cannot dismiss a dialog using it's `Builder`. You can only dismiss a
+dialog using the dialog itself.
+
+There's many ways you can get an instance of `MaterialDialog`. The two major ways are through the `show()` and `build()`
+methods of `MaterialDialog.Builder`.
+
+Through `show()`, which immediately shows the dialog and returns the visible dialog:
+
+```java
+MaterialDialog dialog = new MaterialDialog.Builder(this)
+        .title(R.string.title)
+        .content(R.string.content)
+        .positiveText(R.string.agree)
+        .show();
+```
+
+Through `build()`, which only builds the dialog but doesn't show it until you say so:
+
+```java
+MaterialDialog.Builder builder = new MaterialDialog.Builder(this)
+        .title(R.string.title)
+        .content(R.string.content)
+        .positiveText(R.string.agree);
+
+MaterialDialog dialog = builder.build();
+dialog.show();
+```
+
+Once the dialog is shown, you can dismiss it:
+
+```java
+dialog.dismiss();
+```
+
+There are other various places where the `MaterialDialog` instance is given, such as in some callbacks
+ that are discussed in future sections below.
 
 ---
 
@@ -219,44 +282,41 @@ new MaterialDialog.Builder(this)
 
 # Callbacks
 
-To know when the user selects an action button, you set a callback. To do this, use the `ButtonCallback`
-class and override its `onPositive()`, `onNegative()`, or `onNeutral()` methods as needed. The advantage
-to this is that you can override button functionality *À la carte*, so no need to stub empty methods.
+**As of version 0.8.2.0, the `callback()` Builder method is deprecated in favor of the individual callback methods
+  discussed below. Earlier versions will still require use of `ButtonCallback`.**
+
+To know when the user selects an action button, you set callbacks:
 
 ```java
 new MaterialDialog.Builder(this)
-        .callback(new MaterialDialog.ButtonCallback() {
-            @Override
-            public void onPositive(MaterialDialog dialog) {
-            }
-        });
-
-new MaterialDialog.Builder(this)
-        .callback(new MaterialDialog.ButtonCallback() {
-            @Override
-            public void onPositive(MaterialDialog dialog) {
-            }
-
-            @Override
-            public void onNegative(MaterialDialog dialog) {
-            }
-        });
-
-new MaterialDialog.Builder(this)
-        .callback(new MaterialDialog.ButtonCallback() {
-            @Override
-            public void onPositive(MaterialDialog dialog) {
-            }
-
-            @Override
-            public void onNegative(MaterialDialog dialog) {
-            }
-
-            @Override
-            public void onNeutral(MaterialDialog dialog) {
-            }
-        });
+    .onPositive(new MaterialDialog.SingleButtonCallback() {
+        @Override
+        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+            // TODO
+        }
+    })
+    .onNeutral(new MaterialDialog.SingleButtonCallback() {
+        @Override
+        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+            // TODO
+        }
+    })
+    .onNegative(new MaterialDialog.SingleButtonCallback() {
+        @Override
+        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+            // TODO
+        }
+    })
+    .onAny(new MaterialDialog.SingleButtonCallback() {
+        @Override
+        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+            // TODO
+        }
+    });
 ```
+
+If you are listening for all three action buttons, you could just use `onAny()`. The `which` (`DialogAction`)
+ parameter will tell you which button was pressed.
 
 If `autoDismiss` is turned off, then you must manually dismiss the dialog in these callbacks. Auto dismiss is on by default.
 
@@ -377,6 +437,28 @@ Like action buttons and many other elements of the Material dialog, you can cust
  or `android:colorAccent` (for the Material theme) in your Activity's theme.
  
 There's also a global theming attribute as shown in the Global Theming section of this README: `md_widget_color`.
+
+---
+
+# Assigning IDs to List Item Views
+
+If you need to keep track of list items by ID rather than index, you can assign item IDs from an integer array:
+
+```java
+new MaterialDialog.Builder(this)
+        .title(R.string.socialNetworks)
+        .items(R.array.socialNetworks)
+        .itemsIds(R.array.itemIds)
+        .itemsCallback(new MaterialDialog.ListCallback() {
+            @Override
+            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                Toast.makeText(Activity.this, which + ": " + text + ", ID = " + view.getId(), Toast.LENGTH_SHORT).show();
+            }
+        })
+        .show();
+```
+
+You can also pass a literal integer array (`int[]`) in place of an array resource ID.
 
 ---
 
@@ -521,6 +603,7 @@ new MaterialDialog.Builder(this)
         .neutralColorRes(R.color.material_red_500)
         .negativeColorRes(R.color.material_red_500)
         .widgetColorRes(R.color.material_red_500)
+        .buttonRippleColorRes(R.color.material_red_500)
         .show();
 ```
 
@@ -531,7 +614,7 @@ color attributes.
 
 ## Selectors
 
-Theming selectors allows you to change colors for pressable things:
+Selectors are drawables that change state when pressed or focused.
 
 ```java
 new MaterialDialog.Builder(this)
@@ -548,6 +631,8 @@ a different selector than the neutral and negative buttons. `btnSelectorStacked`
 used when the buttons become stacked, either because there's not enough room to fit them all on one line,
 or because you used `forceStacked(true)` on the `Builder`. `listSelector` is used for list items, when
 you are NOT using a custom adapter.
+
+***Note***: 
 
 ***An important note related to using custom action button selectors***: make sure your selector drawable references
 inset drawables like the default ones do - this is important for correct action button padding.
@@ -689,6 +774,12 @@ you show from an Activity which has a theme containing any of these attributes:
         content is scrollable
     -->
     <item name="md_divider_color">#E91E63</item>
+
+    <!--
+        This overrides the color used for the ripple displayed on action buttons (Lollipop and above).
+        Defaults to the colorControlHighlight attribute from AppCompat OR the Material theme.
+    -->
+    <item name="md_btn_ripple_color">#E91E63</item>
 
     <!--
         This overrides the selector used on list items.
@@ -881,6 +972,13 @@ dialog.getActionButton(DialogAction.POSITIVE).setEnabled(false);
 This library allows you to display progress dialogs with Material design that even use your app's
 accent color to color the progress bars (if you use AppCompat to theme your app, or the Material theme on Lollipop).
 
+## Proguard
+
+Normally, `ObjectAnimator` in the context it's used in this library (for custom progress drawables) would
+need special proguard rules so that certain elements aren't removed when your app is built in release mode.
+Luckily, AAR packages are allowed to specify proguard rules that get included in apps that depend on them.
+So you do not need to worry about including any Proguard rules in order to ensure progress bars behave well.
+
 ## Indeterminate Progress Dialogs
 
 This will display the classic progress dialog with a spinning circle, see the sample project to see it in action:
@@ -972,55 +1070,6 @@ The values passed above are the default.
 
 ---
 
-# Color Chooser Dialog
-
-This library includes a color chooser implementation, which wraps a Material Dialog (that uses a custom view)
-inside of a Dialog Fragment. This means the dialog will survive orientation changes.
-
-The color chooser dialog is used like this:
-
-```java
-boolean accent = false;
-int preselection = // ...
-
-// Accepts an AppCompatActivity and dialog title string ID
-new ColorChooserDialog.Builder(this, R.string.color_palette)
-    .titleSub(R.string.colors)  // optional title when looking at sub colors
-    .accentMode(accent)  // optional boolean, true shows accent palette
-    .doneButton(R.string.md_done_label)  // optional string, changes done button label
-    .cancelButton(R.string.md_cancel_label)  // optional string, changes cancel button label
-    .backButton(R.string.md_back_label)  // optional string, changes back button label
-    .dynamicButtonColor(true)  // true by default, false turns off changing action button colors
-    .preselect(preselection)  // optional color int, preselects a color
-    .show();
-```
-
-The `Activity` passed in the `Builder` constructor must implement `ColorCallback`:
-
-```java
-@Override
-public void onColorSelection(@NonNull ColorChooserDialog dialog, @ColorInt int color) {
-    if (dialog.isAccentMode()) {
-        // Accent color selected
-    } else {
-        // Primary color selected
-    }
-}
-```
-
-See the sample project for more info.
-
----
-
-# Preference Dialogs
-
-Android's `EditTextPreference`, `ListPreference`, and `MultiSelectListPreference` allow you to associate a preference activity's settings
-with user input that's received through typing or selection. Material Dialogs includes `MaterialEditTextPreference`,
-`MaterialListPreference`, and `MaterialMultiSelectListPreference` classes that can be used in your preferences XML to automatically use Material-themed
-dialogs. See the sample project for details.
-
----
-
 # Tint Helper
 
 You can use the `MDTintHelper` class to dynamically color check boxes, radio buttons, edit texts, and progress bars 
@@ -1040,3 +1089,163 @@ MaterialDialog dialog = new MaterialDialog.Builder(this)
         .autoDismiss(false)
         .show();
 ```
+
+---
+
+# Color Chooser Dialogs
+
+The Builder is used like this:
+
+```java
+// Pass AppCompatActivity which implements ColorCallback, along with the title of the dialog
+new ColorChooserDialog.Builder(this, R.string.color_palette)
+    .titleSub(R.string.colors)  // title of dialog when viewing shades of a color
+    .accentMode(accent)  // when true, will display accent palette instead of primary palette
+    .doneButton(R.string.md_done_label)  // changes label of the done button
+    .cancelButton(R.string.md_cancel_label)  // changes label of the cancel button
+    .backButton(R.string.md_back_label)  // changes label of the back button
+    .preselect(accent ? accentPreselect : primaryPreselect)  // optionally preselects a color
+    .dynamicButtonColor(true)  // defaults to true, false will disable changing action buttons' color to currently selected color
+    .show();
+```
+
+The Activity you show the dialog in must implement `ColorCallback`:
+
+```java
+public class MyActivity implements ColorChooserDialog.ColorCallback {
+
+    // ...
+
+    @Override
+    public void onColorSelection(@NonNull ColorChooserDialog dialog, @ColorInt int color) {
+        // TODO
+    }
+}
+```
+
+---
+
+You can also specify custom colors to be displayed if you don't want to use the built-in primary or accent
+color palettes (which consist of the entire Material Design Color Palette):
+
+```java
+int[] primary = new int[] {
+    Color.parseColor("#F44336")
+};
+int[][] secondary = new int[][] {
+    new int[] { Color.parseColor("#EF5350"), Color.parseColor("#F44336"), Color.parseColor("#E53935") }
+};
+
+new ColorChooserDialog.Builder(this, R.string.color_palette)
+    .titleSub(R.string.colors)
+    .customColors(primary, secondary)
+    .show();
+```
+
+The first parameter for primary colors can also take an array resource (`R.array.colors`), which can be
+seen in the sample project. If you pass `null` for the second parameter, there will be no sub levels displayed
+for top level colors.
+
+## Finding Visible Dialogs
+
+Since the `ColorChooserDialog` is a `DialogFragment`, it attaches to your Activity through its `FragmentManager`.
+`ColorChooserDialog` has a utility method called `findVisible(AppCompatActivity, String)` that will
+find a visible color chooser if any is visible:
+
+```java
+ColorChooserDialog primary = ColorChooserDialog.findVisible(this, ColorChooserDialog.TAG_PRIMARY);
+
+ColorChooserDialog accent = ColorChooserDialog.findVisible(this, ColorChooserDialog.TAG_ACCENT);
+
+ColorChooserDialog custom = ColorChooserDialog.findVisible(this, ColorChooserDialog.TAG_CUSTOM);
+```
+
+## User Color Input
+
+By default, color chooser dialogs allow the user to input a custom color using RGB sliders or a Hexadecimal input field.
+This can be disabled if you don't want users to be able to use it:
+
+```java
+new ColorChooserDialog.Builder(this, R.string.color_palette)
+    .allowUserColorInput(false)
+    .customButton(R.string.md_custom_label)
+    .presetsButton(R.string.md_presets_label)
+    .show();
+```
+
+---
+
+# Preference Dialogs
+
+Android's `EditTextPreference`, `ListPreference`, and `MultiSelectListPreference` allow you to associate a preference activity's settings
+with user input that's received through typing or selection. Material Dialogs includes `MaterialEditTextPreference`,
+`MaterialListPreference`, and `MaterialMultiSelectListPreference` classes that can be used in your preferences XML to automatically use Material-themed
+dialogs. See the sample project for details.
+
+---
+
+# Folder Selector Dialogs
+
+The Builder is used like this:
+
+```java
+// Pass AppCompatActivity which implements FolderCallback
+new FolderChooserDialog.Builder(this)
+    .chooseButton(R.string.md_choose_label)  // changes label of the choose button
+    .initialPath("/sdcard/Download")  // changes initial path, defaults to external storage directory
+    .show();
+```
+
+The Activity you show the dialog in must implement `FolderCallback`:
+
+```java
+public class MyActivity implements FolderChooserDialog.FolderCallback {
+
+    // ...
+
+    @Override
+    public void onFolderSelection(File folder) {
+        // TODO
+    }
+}
+```
+
+---
+
+# Simple List Dialogs
+
+Simple List Dialogs are a specific style of list dialogs taken from the Material Design Guidelines: https://www.google.com/design/spec/components/dialogs.html#dialogs-simple-dialogs
+
+This library's implementation is just a pre-made adapter that you can pass to the `MaterialDialog.Builder`.
+
+```java
+final MaterialSimpleListAdapter adapter = new MaterialSimpleListAdapter(this);
+adapter.add(new MaterialSimpleListItem.Builder(this)
+    .content("username@gmail.com")
+    .icon(R.drawable.ic_account_circle)
+    .backgroundColor(Color.WHITE)
+    .build());
+adapter.add(new MaterialSimpleListItem.Builder(this)
+    .content("user02@gmail.com")
+    .icon(R.drawable.ic_account_circle)
+    .backgroundColor(Color.WHITE)
+    .build());
+adapter.add(new MaterialSimpleListItem.Builder(this)
+    .content(R.string.add_account)
+    .icon(R.drawable.ic_content_add)
+    .iconPaddingDp(8)
+    .build());
+
+new MaterialDialog.Builder(this)
+    .title(R.string.set_backup)
+    .adapter(adapter, new MaterialDialog.ListCallback() {
+        @Override
+        public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
+            MaterialSimpleListItem item = adapter.getItem(which);
+            // TODO
+        }
+    })
+    .show();
+```
+
+---

@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcel;
@@ -15,6 +16,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.commons.R;
 
 import java.lang.reflect.Method;
 
@@ -29,16 +31,29 @@ public class MaterialDialogPreference extends DialogPreference {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public MaterialDialogPreference(Context context) {
         super(context);
-        init(context);
+        init(context, null);
     }
 
     public MaterialDialogPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context);
+        init(context, attrs);
     }
 
-    private void init(Context context) {
+    public MaterialDialogPreference(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init(context, attrs);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public MaterialDialogPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+        init(context, attrs);
+    }
+
+
+    private void init(Context context, AttributeSet attrs) {
         this.context = context;
+        PrefUtil.setLayoutResource(this, attrs);
     }
 
     @Override

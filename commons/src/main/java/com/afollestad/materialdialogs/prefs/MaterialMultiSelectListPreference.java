@@ -14,6 +14,7 @@ import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.lang.reflect.Method;
@@ -34,12 +35,25 @@ public class MaterialMultiSelectListPreference extends MultiSelectListPreference
     private MaterialDialog mDialog;
 
     public MaterialMultiSelectListPreference(Context context) {
-        this(context, null);
+        super(context);
+        init(context, null);
     }
 
     public MaterialMultiSelectListPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context);
+        init(context, attrs);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public MaterialMultiSelectListPreference(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init(context, attrs);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public MaterialMultiSelectListPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+        init(context, attrs);
     }
 
     @Override
@@ -49,8 +63,9 @@ public class MaterialMultiSelectListPreference extends MultiSelectListPreference
             mDialog.setItems(entries);
     }
 
-    private void init(Context context) {
+    private void init(Context context, AttributeSet attrs) {
         this.context = context;
+        PrefUtil.setLayoutResource(this, attrs);
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.GINGERBREAD_MR1)
             setWidgetLayoutResource(0);
     }
@@ -74,20 +89,20 @@ public class MaterialMultiSelectListPreference extends MultiSelectListPreference
                 .icon(getDialogIcon())
                 .negativeText(getNegativeButtonText())
                 .positiveText(getPositiveButtonText())
-                .callback(new MaterialDialog.ButtonCallback() {
+                .onAny(new MaterialDialog.SingleButtonCallback() {
                     @Override
-                    public void onNeutral(MaterialDialog dialog) {
-                        onClick(dialog, DialogInterface.BUTTON_NEUTRAL);
-                    }
-
-                    @Override
-                    public void onNegative(MaterialDialog dialog) {
-                        onClick(dialog, DialogInterface.BUTTON_NEGATIVE);
-                    }
-
-                    @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        onClick(dialog, DialogInterface.BUTTON_POSITIVE);
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        switch (which) {
+                            default:
+                                MaterialMultiSelectListPreference.this.onClick(dialog, DialogInterface.BUTTON_POSITIVE);
+                                break;
+                            case NEUTRAL:
+                                MaterialMultiSelectListPreference.this.onClick(dialog, DialogInterface.BUTTON_NEUTRAL);
+                                break;
+                            case NEGATIVE:
+                                MaterialMultiSelectListPreference.this.onClick(dialog, DialogInterface.BUTTON_NEGATIVE);
+                                break;
+                        }
                     }
                 })
                 .items(getEntries())

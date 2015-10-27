@@ -1,6 +1,7 @@
 package com.afollestad.materialdialogs.simplelist;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -46,10 +47,15 @@ public class MaterialSimpleListAdapter extends ArrayAdapter<MaterialSimpleListIt
         if (dialog != null) {
             final MaterialSimpleListItem item = getItem(index);
             ImageView ic = (ImageView) view.findViewById(android.R.id.icon);
-            if (item.getIcon() != null)
+            if (item.getIcon() != null) {
                 ic.setImageDrawable(item.getIcon());
-            else
+                ic.setPadding(item.getIconPadding(), item.getIconPadding(),
+                        item.getIconPadding(), item.getIconPadding());
+                ic.getBackground().setColorFilter(item.getBackgroundColor(),
+                        PorterDuff.Mode.SRC_ATOP);
+            } else {
                 ic.setVisibility(View.GONE);
+            }
             TextView tv = (TextView) view.findViewById(android.R.id.title);
             tv.setTextColor(dialog.getBuilder().getItemColor());
             tv.setText(item.getContent());
